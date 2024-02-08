@@ -41,12 +41,14 @@ func main() {
 		cfg.Package.Version = *version
 	}
 
-	ensureDirTree(*outdir)
-	debianControl(*outdir, cfg)
-	debianPreinst(*outdir, cfg)
-	debianPostinst(*outdir, cfg)
-	debianPrerm(*outdir, cfg)
-	systemdService(*outdir, cfg)
+	pkgname := fmt.Sprintf("%s-%s", cfg.Package.Name, cfg.Package.Version)
+
+	ensureDirTree(*outdir, pkgname)
+	debianControl(*outdir, pkgname, cfg)
+	debianPreinst(*outdir, pkgname, cfg)
+	debianPostinst(*outdir, pkgname, cfg)
+	debianPrerm(*outdir, pkgname, cfg)
+	systemdService(*outdir, pkgname, cfg)
 }
 
 type DebianConf struct {
@@ -66,17 +68,17 @@ type ServiceConf struct {
 	Environment map[string]string `yaml:"environment"`
 }
 
-func ensureDirTree(outdir string) {
+func ensureDirTree(outdir string, pkgname string) {
 
 	must(os.MkdirAll(filepath.Join(
 		outdir,
-		"debian",
+		pkgname,
 		"DEBIAN",
 	), os.ModePerm))
 
 	must(os.MkdirAll(filepath.Join(
 		outdir,
-		"debian",
+		pkgname,
 		"etc",
 		"systemd",
 		"system",
@@ -84,16 +86,16 @@ func ensureDirTree(outdir string) {
 
 	must(os.MkdirAll(filepath.Join(
 		outdir,
-		"debian",
+		pkgname,
 		"usr",
 		"local",
 		"bin",
 	), os.ModePerm))
 }
 
-func debianControl(outdir string, cfg DebianConf) {
+func debianControl(outdir string, pkgname string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
-		filepath.Join(outdir, "debian", "DEBIAN", "control"),
+		filepath.Join(outdir, pkgname, "DEBIAN", "control"),
 		os.O_WRONLY|os.O_CREATE,
 		0644,
 	))
@@ -109,9 +111,9 @@ func debianControl(outdir string, cfg DebianConf) {
 	}))
 }
 
-func debianPreinst(outdir string, cfg DebianConf) {
+func debianPreinst(outdir string, pkgname string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
-		filepath.Join(outdir, "debian", "DEBIAN", "preinst"),
+		filepath.Join(outdir, pkgname, "DEBIAN", "preinst"),
 		os.O_WRONLY|os.O_CREATE,
 		0775,
 	))
@@ -123,9 +125,9 @@ func debianPreinst(outdir string, cfg DebianConf) {
 	}))
 }
 
-func debianPostinst(outdir string, cfg DebianConf) {
+func debianPostinst(outdir string, pkgname string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
-		filepath.Join(outdir, "debian", "DEBIAN", "postinst"),
+		filepath.Join(outdir, pkgname, "DEBIAN", "postinst"),
 		os.O_WRONLY|os.O_CREATE,
 		0775,
 	))
@@ -137,9 +139,9 @@ func debianPostinst(outdir string, cfg DebianConf) {
 	}))
 }
 
-func debianPrerm(outdir string, cfg DebianConf) {
+func debianPrerm(outdir string, pkgname string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
-		filepath.Join(outdir, "debian", "DEBIAN", "prerm"),
+		filepath.Join(outdir, pkgname, "DEBIAN", "prerm"),
 		os.O_WRONLY|os.O_CREATE,
 		0775,
 	))
@@ -151,11 +153,11 @@ func debianPrerm(outdir string, cfg DebianConf) {
 	}))
 }
 
-func systemdService(outdir string, cfg DebianConf) {
+func systemdService(outdir string, pkgname string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
 		filepath.Join(
 			outdir,
-			"debian",
+			pkgname,
 			"etc", "systemd", "system",
 			fmt.Sprintf("%s.service", cfg.Package.Name),
 		),
