@@ -67,9 +67,16 @@ type ServiceConf struct {
 }
 
 func ensureDirTree(outdir string) {
+
 	must(os.MkdirAll(filepath.Join(
 		outdir,
+		"debian",
 		"DEBIAN",
+	), os.ModePerm))
+
+	must(os.MkdirAll(filepath.Join(
+		outdir,
+		"debian",
 		"etc",
 		"systemd",
 		"system",
@@ -77,7 +84,7 @@ func ensureDirTree(outdir string) {
 
 	must(os.MkdirAll(filepath.Join(
 		outdir,
-		"DEBIAN",
+		"debian",
 		"usr",
 		"local",
 		"bin",
@@ -86,7 +93,7 @@ func ensureDirTree(outdir string) {
 
 func debianControl(outdir string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
-		filepath.Join(outdir, "DEBIAN", "control"),
+		filepath.Join(outdir, "debian", "DEBIAN", "control"),
 		os.O_WRONLY|os.O_CREATE,
 		0644,
 	))
@@ -104,7 +111,7 @@ func debianControl(outdir string, cfg DebianConf) {
 
 func debianPreinst(outdir string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
-		filepath.Join(outdir, "DEBIAN", "preinst"),
+		filepath.Join(outdir, "debian", "DEBIAN", "preinst"),
 		os.O_WRONLY|os.O_CREATE,
 		0775,
 	))
@@ -118,7 +125,7 @@ func debianPreinst(outdir string, cfg DebianConf) {
 
 func debianPostinst(outdir string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
-		filepath.Join(outdir, "DEBIAN", "postinst"),
+		filepath.Join(outdir, "debian", "DEBIAN", "postinst"),
 		os.O_WRONLY|os.O_CREATE,
 		0775,
 	))
@@ -132,7 +139,7 @@ func debianPostinst(outdir string, cfg DebianConf) {
 
 func debianPrerm(outdir string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
-		filepath.Join(outdir, "DEBIAN", "prerm"),
+		filepath.Join(outdir, "debian", "DEBIAN", "prerm"),
 		os.O_WRONLY|os.O_CREATE,
 		0775,
 	))
@@ -148,7 +155,7 @@ func systemdService(outdir string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
 		filepath.Join(
 			outdir,
-			"DEBIAN",
+			"debian",
 			"etc", "systemd", "system",
 			fmt.Sprintf("%s.service", cfg.Package.Name),
 		),
