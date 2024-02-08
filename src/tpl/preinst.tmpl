@@ -1,0 +1,8 @@
+#!/bin/bash
+if systemctl is-active --quiet {{ .name }}.service
+then
+  echo "daemon is running,stopping it"
+  systemctl stop {{ .name }}.service
+else
+  echo "daemon is not running"
+fi

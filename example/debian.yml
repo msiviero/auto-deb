@@ -1,0 +1,12 @@
+
+package:
+  name: my-app
+  architecture: all
+  maintainer: Marco Siviero <m.siviero83@gmail.com>
+  description: A packaged app
+  version: 0.1
+
+service:
+  environment:
+    FOO: bar
+    home : /home
