@@ -106,7 +106,7 @@ func debianPreinst(outdir string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
 		filepath.Join(outdir, "DEBIAN", "preinst"),
 		os.O_WRONLY|os.O_CREATE,
-		0644,
+		0775,
 	))
 	defer filehandler.Close()
 
@@ -120,7 +120,7 @@ func debianPostinst(outdir string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
 		filepath.Join(outdir, "DEBIAN", "postinst"),
 		os.O_WRONLY|os.O_CREATE,
-		0644,
+		0775,
 	))
 	defer filehandler.Close()
 
@@ -134,7 +134,7 @@ func debianPrerm(outdir string, cfg DebianConf) {
 	filehandler := check(os.OpenFile(
 		filepath.Join(outdir, "DEBIAN", "prerm"),
 		os.O_WRONLY|os.O_CREATE,
-		0644,
+		0775,
 	))
 	defer filehandler.Close()
 
@@ -153,7 +153,7 @@ func systemdService(outdir string, cfg DebianConf) {
 			fmt.Sprintf("%s.service", cfg.Package.Name),
 		),
 		os.O_WRONLY|os.O_CREATE,
-		0644,
+		0775,
 	))
 	defer filehandler.Close()
 
