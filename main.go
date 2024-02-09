@@ -65,6 +65,7 @@ type PackageConf struct {
 }
 
 type ServiceConf struct {
+	User        string            `yaml:"user"`
 	Environment map[string]string `yaml:"environment"`
 }
 
@@ -171,8 +172,8 @@ func systemdService(outdir string, pkgname string, cfg DebianConf) {
 		"executable":  cfg.Package.Name,
 		"environment": cfg.Service.Environment,
 		"description": cfg.Package.Description,
-		"workingdir":  filepath.Join("/home", cfg.Package.Name),
-		"user":        cfg.Package.Name,
+		"workingdir":  filepath.Join("/home", cfg.Service.User),
+		"user":        cfg.Service.User,
 	}))
 }
 
