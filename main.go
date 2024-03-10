@@ -32,10 +32,12 @@ func main() {
 
 	configfile := flag.String("c", "./debian.yml", "config-file")
 	outdir := flag.String("o", ".", "outdir")
-	version := flag.String("v", "", "version")
+	version := flag.String("v", "0.0-dev", "version")
 	flag.Parse()
 
 	cfg := parseConfig(*configfile)
+
+	cfg.Service.Environment["version"] = *version
 
 	if len(*version) > 0 {
 		cfg.Package.Version = *version
