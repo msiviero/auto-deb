@@ -37,7 +37,7 @@ func main() {
 
 	cfg := parseConfig(*configfile)
 
-	cfg.Service.Environment["version"] = *version
+	cfg.Service.Environment["APP_VERSION"] = *version
 
 	if len(*version) > 0 {
 		cfg.Package.Version = *version
